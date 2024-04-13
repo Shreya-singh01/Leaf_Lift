@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interest Form</title>
+  <link rel="stylesheet" href="book.css">
+</head>
+<body>
+  <div class="container">
+    <div class="text-center mt-4">
+      <h1 class="text-primary">Book A Ride</h1>
+      <p>"Streamline your travels, book hassle-free with LeafLift."</p>
+    </div>
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <div class="form-container">
+          <h2 class="text-center mb-4">LeafLift</h2>
+          <form id="interestForm" method="POST" name="interest">
+            <div class="form-group">
+              <input type="text" class="form-control" id="name" name="name" placeholder="Your Name" required>
+            </div>
+            <div class="form-group">
+              <input type="email" class="form-control" id="email" name="_replyto" placeholder="Your Email" required>
+            </div>
+            <div class="form-group">
+              <select class="form-control" id="interestLevel" name="interestLevel">
+                <option value="" disabled selected>Gender</option>
+                <option value="High">Female</option>
+                <option value="Medium">Male</option>
+                <option value="Low">Others</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <input type="date" class="form-control" id="DOB" name="_replyto" placeholder="Your Date of Birth" required>
+            </div>
+            <div class="form-group">
+              <input type="number" class="form-control" id="Mobile number" name="_replyto" placeholder="Your mobile no." required>
+            </div>
+            <div class="form-group text-center">
+              <button type="submit" class="btn-submit">Submit</button>
+              <a href="index.html" class="btn-back">Back</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="scripts.js"></script>
+</body>
+</html>

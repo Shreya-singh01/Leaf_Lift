@@ -1,0 +1,48 @@
+.box {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 350px;
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }/* Optional: Add a shadow effect */
+
+ /* Optional: Add a shadow effect */
+
+
+/* Other styles remain unchanged */
+
+.path {
+    font-weight: bold;
+}
+
+.heading {
+    color: darkgreen;
+    font-size: 1.5em;
+    font-weight: 700;
+}
+
+.bkg1 {
+    background-image: url('imgbkg1.jpg');
+    background-size: contain;
+}
+
+.bkg2 {
+    background-image: url('imgbkg2.jpg');
+    background-size: contain;
+}
+
+.img {
+    height: 50px;
+    width: 50px;
+    border-radius:50%;
+}
+a{
+    color: black;
+    text-decoration: none  ;
+}

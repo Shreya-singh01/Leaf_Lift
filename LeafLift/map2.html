@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Connect Two Locations on Map</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="card.css">
+    <!-- Reference to the Bing Maps SDK -->
+    <script type='text/javascript'
+            src='http://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AhwpMJFRJ4w8HywN_YdHztzI0w9CUtJuEbvoQq0RZuVpjOzYHV_NwnWp1_noVI51' 
+            async defer></script>
+
+    <!-- CSS for styling the map container and search boxes -->
+    <style>
+        /* General styling */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Navbar styling */
+        .navbar {
+            background-color: white; /* Adjusted for less opacity */
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, .09);
+            box-shadow: 0 0 4px rgba(0,0,0,.18);
+        }
+
+        .navbar a {
+            color: black;
+            text-decoration: none;
+            padding: 10px;
+        }
+
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Map container styling */
+        #myMap {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 60px); /* Adjusted for navbar height */
+            background-image:url("ss.jpg");
+        }
+
+        /* Search box container styling */
+        .search-box-container {
+            position: absolute;
+            top: 100px; /* Adjusted for navbar height */
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 350px;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.8); /* Adjusted for visibility */
+            border-radius: 8px;
+            z-index: 1000; /* Ensure it's above the map */
+        }
+
+        /* Search box styling */
+        .search-box {
+            width: 100%;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* Search button styling */
+        .search-btn {
+            width: 100%;
+            padding: 10px 20px;
+            background-color: #0078D4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .search-btn:hover {
+            background-color: #005A9E;
+        }
+        
+    </style>
+    
+    <script type='text/javascript'>
+    function GetMap() {
+        var map = new Microsoft.Maps.Map('#myMap');
+        var directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
+
+        // Function to create a pushpin on the map
+        function addPushpin(location, title) {
+            var pin = new Microsoft.Maps.Pushpin(location, {title: title});
+            map.entities.push(pin);
+        }
+
+        // Function to handle selected suggestion
+        function selectedSuggestion(suggestionResult, textboxId) {
+            if (suggestionResult) {
+                var location = suggestionResult.location;
+                var address = suggestionResult.formattedSuggestion;
+
+                // Add pushpin to the map
+                addPushpin(location, address);
+
+                // Zoom the map to the selected location
+                map.setView({ center: location, zoom: 15 });
+            }
+        }
+
+        // Function to find route between two locations
+        function findRoute() {
+            var pickupLocation = document.getElementById('pickupLocation').value;
+            var dropoffLocation = document.getElementById('dropoffLocation').value;
+
+            directionsManager.setRequestOptions({
+                routeMode: Microsoft.Maps.Directions.RouteMode.driving,
+                routeDraggable: false
+            });
+
+            directionsManager.clearAll();
+            directionsManager.addWaypoint(new Microsoft.Maps.Directions.Waypoint({ address: pickupLocation }));
+            directionsManager.addWaypoint(new Microsoft.Maps.Directions.Waypoint({ address: dropoffLocation }));
+
+            directionsManager.calculateDirections();
+        }
+
+        // Initialize the autosuggest module
+        Microsoft.Maps.loadModule('Microsoft.Maps.AutoSuggest', function () {
+            var options = {
+                maxResults: 4,
+                map: map // Map object for better suggestions based on map view
+            };
+            var manager = new Microsoft.Maps.AutosuggestManager(options);
+            
+            // Create the pickup location search box
+            var pickupTextBox = document.getElementById('pickupLocation');
+            manager.attachAutosuggest(pickupTextBox, 'pickupLocationContainer', function (suggestionResult) {
+                selectedSuggestion(suggestionResult, 'pickupLocation');
+            });
+            
+            // Create the drop-off location search box
+            var dropoffTextBox = document.getElementById('dropoffLocation');
+            manager.attachAutosuggest(dropoffTextBox, 'dropoffLocationContainer', function (suggestionResult) {
+                selectedSuggestion(suggestionResult, 'dropoffLocation');
+            });
+        });
+    }
+    </script>
+
+    <!-- Bing Maps Autosuggest script -->
+    <script type='text/javascript'
+            src='https://www.bing.com/api/maps/sdkrelease/mapcontrol/isdk/autosuggestmodule' 
+            async defer></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="#" class="logo"><img src="logo.png" alt="Logo" style="height: 40px;"></a>
+        <div class="navbar-right">
+            <a href="front-page.html">About</a>
+            <a href="#">Contact</a>
+            <a href="#">Sign in</a>
+        </div>
+    </div>
+
+    <!-- Search box container -->
+    <div class="search-box-container">
+        <!-- Search box for Pickup Location -->
+        <input id="pickupLocation" class="search-box" placeholder="Enter Pick-up Location">
+        <div id="pickupLocationContainer"></div>
+
+        <!-- Search box for Drop-off Location -->
+        <input id="dropoffLocation" class="search-box" placeholder="Enter Drop-off Location">
+        <div id="dropoffLocationContainer"></div>
+        <!-- Search button to find route -->
+        <button class="search-btn" onclick="pop_up">Search</button>
+    </div>
+    
+    <!-- Map container -->
+    <div id="myMap"></div>
+
+    <!-- Call the loadMapScenario function after Bing Maps SDK is loaded -->
+
+    <div class="box">
+        <p class="heading">Rides</p>
+        <a href="booknew.html">
+            <div class="info">
+                <div class="img bkg1"></div>
+                <p class="pc"><span class="path">Path:</span> Delhi to Mumbai</p>
+                <p class="pc"><span class="path">Departure time:</span> 8:00 AM</p>
+            </div>
+        </a>
+        <a class="booknew.html">
+            <div class="info">
+                <div class="img bkg2"></div>
+                <p class="pc"><span class="path">Path:</span> Civil Lines to Sector 63</p>
+                <p class="pc"><span class="path">Departure time:</span> 8:00 AM</p>
+            </div>
+        </a>
+    </div>
+
+    <script type='text/javascript'>
+        Microsoft.Maps.registerLoad(GetMap);
+    </script>
+    
+
+    </style>
+</body>
+</html>
+
+
